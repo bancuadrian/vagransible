@@ -1,0 +1,12 @@
+---
+- hosts: all
+  sudo: true
+  vars_files:
+    - settings.yml
+    - vars/common.yml
+  roles:
+    - init
+    - packages
+    - composer
+    - import_mysql
+    - vhost

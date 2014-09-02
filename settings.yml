@@ -1,0 +1,16 @@
+---
+server:
+  hostname: vm-work.box
+  ip_address: 172.22.22.22
+
+syncfolders:
+  local: "~/Documents/webroot"
+  remote: "/var/www/workprojects"
+
+hosts:
+  [{ servername: "web1-local.box",
+    documentroot: "{{ syncfolders['remote'] }}/web1-local",
+    remote_mysql_import_file: "{{ syncfolders['remote'] }}/web1-local/private/sql_to_import.sql",
+    database_name: "my_database"},
+   { servername: "web2-local.box",
+     documentroot: "{{ syncfolders['remote'] }}/web2-local"}]

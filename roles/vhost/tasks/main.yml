@@ -1,0 +1,14 @@
+---
+- name: Create apache2 vhosts
+  template:
+    src: vhost.conf.tpl
+    dest: /etc/apache2/sites-available/{{ item.servername }}.conf
+  with_items: hosts
+
+- name: Enable apache2 vhosts
+  file:
+    src: /etc/apache2/sites-available/{{ item.servername }}.conf
+    dest: /etc/apache2/sites-enabled/{{ item.servername }}.conf
+    state: link
+  with_items: hosts
+  notify: Restart Apache

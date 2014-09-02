@@ -1,0 +1,29 @@
+---
+- name: Install packages
+  apt: pkg={{ item }} state=latest
+  with_items:
+    - apache2
+    - libapache2-mod-php5
+    - mysql-server
+    - python-mysqldb
+    - git
+    - memcached
+    - php5-mcrypt
+    - php5-mysql
+    - php5-gd
+    - php5-geoip
+    - php5-memcached
+    - php5-curl
+  notify: Restart Apache
+
+- name: Activate mcrypt
+  shell: php5enmod mcrypt
+  notify: Restart Apache
+
+- name: Activate mod_rewrite
+  shell: a2enmod rewrite
+  notify: Restart Apache
+
+- name: mysql listen on all ports
+  shell: sed -e '/bind-address/ s/^#*/#/' -i /etc/mysql/my.cnf
+  notify: Restart MySql

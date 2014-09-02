@@ -1,0 +1,30 @@
+---
+- name: Drop DB's
+  mysql_db: name="{{ item.database_name}}" state=absent
+  with_items: hosts
+  when: item.database_name is defined
+
+- name: Create DB's
+  mysql_db: name="{{ item.database_name}}" state=present
+  with_items: hosts
+  when: item.database_name is defined
+
+- name: Import sql if exists
+  mysql_db: name={{ item.database_name }} state=import target="{{ item.remote_mysql_import_file }}"
+  with_items: hosts
+  when: item.database_name is defined
+
+- name: Create user for mysql -> vagrant/vagrant
+  mysql_user: name=vagrant password=vagrant host=% priv=*.*:ALL,GRANT state=present
+
+- name: Delete CRON's if any
+  cron: cron_file="{{ item.database_name }}_backup" state=absent
+  with_items: hosts
+  when: item.database_name is defined
+
+- name: Create CRON's
+  cron: name="mysql_autobackup_{{ item.database_name }}" minute=59
+        user="root" job="mysqldump -u root {{ item.database_name }} > {{ item.remote_mysql_import_file }}"
+        cron_file="{{ item.database_name }}_backup"
+  with_items: hosts
+  when: item.database_name is defined

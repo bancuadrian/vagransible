@@ -1,0 +1,8 @@
+---
+    servername : "{{ server['hostname'] }}"
+    php_extensions : 
+      - php5-mcrypt
+      - php5-mysql
+      - php5-gd
+      - php5-geoip
+      - php5-memcached
