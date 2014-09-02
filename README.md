@@ -1,3 +1,5 @@
+![alt tag](https://raw.githubusercontent.com/bancuadrian/vagransible/master/logo.jpg)
+
 Vagransible
 ===========
 
